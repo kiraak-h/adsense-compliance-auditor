@@ -1,16 +1,14 @@
-# Consent Banner Checklist
+# User Consent & Regulatory Compliance Checklist
 
-Ensure all elements comply with GDPR, CCPA, and Google's EU User Consent Policy.
+## 1. Google Certified CMP Requirements
+- [ ] **Certified Provider**: The website/app must utilize a framework certified by Google (e.g., Google Funding Choices, Cookiebot, OneTrust).
+- [ ] **IAB TCF v2.2 Integration**: Verify that the Consent Management Platform correctly transmits the standardized Transparency and Consent Framework strings to the `adsbygoogle.js` script.
 
-## Certified CMP Requirement
-- [ ] Implement a Google-certified Consent Management Platform (CMP) integrated with the IAB TCF v2.2 framework.
+## 2. EEA & UK Regulations (GDPR)
+- [ ] **Symmetric Choices**: The "Reject All" button must match the visual weight, color contrast, and font size of the "Accept All" button to prevent dark pattern strikes.
+- [ ] **Granular Options**: Users must have the ability to toggle specific data-processing purposes (e.g., personalized ads, basic measurements) inside a "Manage Options" panel.
+- [ ] **Persistent Revocation**: A visible link or sticky widget (e.g., "Privacy Settings") must remain accessible on every page to allow users to withdraw consent at any time.
 
-## GDPR (European Union)
-- [ ] Explicit consent required for personalized ads (cookies/local storage).
-- [ ] Provide clear options to "Accept All", "Reject All", and "Manage Preferences".
-- [ ] Ensure consent is freely given, specific, informed, and unambiguous.
-
-## CCPA / CPRA (California)
-- [ ] Display a "Do Not Sell or Share My Personal Information" link.
-- [ ] Provide a toll-free number or email address for data privacy requests.
-- [ ] Ensure opt-out mechanisms are easily accessible on the homepage.
+## 3. US State Regulations (CCPA/CPRA)
+- [ ] **Footer Opt-Out Link**: The website footer must feature a conspicuous link reading exactly: *"Do Not Sell or Share My Personal Information"*.
+- [ ] **Global Privacy Control (GPC)**: The infrastructure must automatically recognize and honor automated GPC browser signals without requiring manual user input.
