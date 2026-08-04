@@ -41,27 +41,60 @@ Add the contents of `adsense-global-audit-skill.md` to your repository's `CLAUDE
 
 ## 📖 How to Clear AdSense Warnings & Run Scans
 
-### 1. Execute the IVT Monitor
+This guide explains how to use the specific files inside this repository to clear Google AdSense dashboard warnings and audit your new code templates cleanly.
 
-If you receive an Invalid Traffic (IVT) or click-bombing warning, instantly run the included shell script against your server logs:
+---
 
-```bash
-bash monitor-traffic-ivt.sh
+### 🛠️ Part 1: Clearing Out AdSense Dashboard Warnings
+
+#### 1. Resolving the "Earnings at risk" ads.txt Alert
+
+* **The Issue**: Google displays an alert stating you need to fix issues with your `ads.txt` file to prevent severe revenue loss.
+* **The Fix**:
+  1. Open your copy of the `ads.txt` file from this repository.
+  2. Copy the initialization line: `google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0`.
+  3. Swap the `pub-0000000000000000` placeholder out for your true, private **AdSense Publisher ID** (found inside your AdSense Account console panel).
+  4. Upload this file directly to your website server's absolute root directory so it registers live at: `https://yourwebsite.com`. Google's crawlers will scan it and clear the alert within 24 to 48 hours.
+
+#### 2. Resolving "Cumulative Layout Shift (CLS)" Code Flags
+
+* **The Issue**: Dynamic ad placements inject themselves into your site frames unpredictably, pushing content downward and causing policy strikes for accidental click risks.
+* **The Fix**:
+  1. Copy the complete structural layout code inside `premium_anti_cls_wrapper.html`.
+  2. Paste this wrapper directly into your target website HTML files where ads are intended to populate.
+  3. Swap out the template publisher ID (`ca-pub-0000000000000000`) with your actual ID. The code reserves a static vertical spacing boundary window beforehand, stabilizing page rendering.
+
+---
+
+### 🤖 Part 2: Running Pre-Application Scans in Claude
+
+Before launching a new web domain or deploying ad scripts onto a fresh page, you can use your custom Claude Skill to scan your project metadata for active program violations.
+
+#### Step 1: Initialize the Audit Engine
+
+Open a brand-new chat interface with Claude. Copy and paste the entire markdown code block from your `adsense-global-audit-skill.md` file into the prompt area, adding this instruction tag at the top:
+
+```text
+Initialize this Master Skill Engine into your session memory. Acknowledge when ready.
 ```
 
-This will parse the NGINX access logs and flag any malicious IPs exceeding the configured velocity thresholds.
+*Claude will process the parameters and reply confirming it is waiting for your property profile inputs.*
 
-### 2. Validate Layout Proximity (Click-jacking)
+#### Step 2: Ingest Your Website or Application Profiles
 
-Accidental click warnings are often caused by poor layout spacing.
+Drop your raw layout dimensions, metadata descriptions, or layout logs directly into the prompt thread. For example:
 
-- Ensure all interactive elements (menus, buttons) maintain a safe margin (e.g., `150px`) from ad units.
-- Implement the `premium_anti_cls_wrapper.html` code block to secure your placement zones.
+```text
+Analyze my new web layout using the loaded engine modules:
+- Total Indexable Articles: 7 posts (averaging 380 words per node)
+- Navigation Layout: Standard dropdown menu resting 4px above an active display ad script container.
+- Legal Pages: "Contact Us" is active; "Privacy Policy" document is unbuilt.
+```
 
-### 3. Verify Consent and Policy Compliance
+#### Step 3: Parse the Generated Compliance Report
 
-If AdSense restricts serving due to CMP or privacy policy violations:
+The loaded engine will parse your metrics instantly and return a structured report highlighting your exact technical flaws before you apply your live AdSense ID:
 
-- Walk through the `consent-banner-checklist.md` to ensure your CMP framework satisfies TCF v2.2 and GDPR.
-- Update your legal pages using the `privacy-policy-template.md` to explicitly declare DART cookie tracking.
-- Verify that `ads.txt` is successfully hosted at your domain root with your live publisher ID.
+* **Low-Value Content Risk**: It will flag that your 7 thin articles fail Google's baseline 15+ rich post threshold.
+* **Proximity Violation**: It will highlight the 4px navigation margin as a massive accidental click liability.
+* **Missing Governance**: It will issue a critical warning to insert a Cookie-compliant Privacy Policy block immediately.
