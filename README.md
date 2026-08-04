@@ -1,5 +1,7 @@
 # AdSense Compliance Auditor
 
+![AdSense](https://img.shields.io/badge/topic-adsense-blue.svg) ![AdMob](https://img.shields.io/badge/topic-admob-blue.svg) ![Claude AI](https://img.shields.io/badge/topic-claude--ai-blue.svg) ![Compliance](https://img.shields.io/badge/topic-compliance-blue.svg)
+
 An automated compliance auditing tool for AdSense implementations.
 
 ## Installation
