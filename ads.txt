@@ -1,0 +1,2 @@
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# DEVELOPER NOTE: Remember to swap out the "pub-0000000000000000" placeholder with our live private AdSense Publisher ID inside our server workspace!
