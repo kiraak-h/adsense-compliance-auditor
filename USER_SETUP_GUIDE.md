@@ -10,8 +10,8 @@ This guide outlines exactly how external developers and publishers can set up an
 1. Log into your account at [claude.ai](https://claude.ai) and click on **Projects** in the left-hand navigation sidebar.
 2. Click **Create Project** and name it `AdSense Optimization Workspace`.
 3. In the right-hand panel of your new project view, click **Set Custom Instructions**.
-4. Navigate to this repository, copy the entire raw codebase from [`adsense-global-audit-skill.md`](./adsense-global-audit-skill.md), paste it into the custom instructions text field, and click **Save**.
-5. *(Optional)*: Download the [`adsense-updates.txt`](./adsense-updates.txt) tracking file, along with the optimization engines located in [`advertiser-suite/`](./advertiser-suite/), and upload them into your Claude Project's **Knowledge** directory.
+4. Navigate to this repository, copy the entire raw codebase from [`adsense-global-audit-skill.md`](./publisher-suite/adsense-global-audit-skill.md), paste it into the custom instructions text field, and click **Save**.
+5. *(Optional)*: Download the [`adsense-updates.txt`](./publisher-suite/adsense-updates.txt) tracking file, along with the optimization engines located in [`advertiser-suite/`](./advertiser-suite/), and upload them into your Claude Project's **Knowledge** directory.
 
 ---
 
@@ -19,7 +19,7 @@ This guide outlines exactly how external developers and publishers can set up an
 *Best for users who want to run a fast, single-session compliance audit on a code string or traffic sheet without creating a full project archive.*
 
 1. Open any standard, fresh chat window layout at [claude.ai](https://claude.ai).
-2. Copy the full markdown text block from the [`adsense-global-audit-skill.md`](./adsense-global-audit-skill.md) file inside this repository.
+2. Copy the full markdown text block from the [`adsense-global-audit-skill.md`](./publisher-suite/adsense-global-audit-skill.md) file inside this repository.
 3. Paste the entire block into the empty Claude chat box, add this explicit initialization instruction to the very top line, and press enter:
    ```text
    Initialize this master compliance skill into your session memory. Acknowledge when ready.
@@ -33,5 +33,5 @@ This guide outlines exactly how external developers and publishers can set up an
 
 1. Open your terminal and navigate to the absolute root directory of your website or mobile application source code workspace.
 2. Initialize a brand new text file named exactly `CLAUDE.md`.
-3. Paste the complete command suite from [`adsense-global-audit-skill.md`](./adsense-global-audit-skill.md) directly into that file and save it.
+3. Paste the complete command suite from [`adsense-global-audit-skill.md`](./publisher-suite/adsense-global-audit-skill.md) directly into that file and save it.
 4. When launching Claude Desktop, running native IDE AI plugins (such as Cursor or VS Code extensions), or executing terminal agents within that folder, the runtime will read your `CLAUDE.md` ruleset automatically and enforce compliance parameters during code generation loops.

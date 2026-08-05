@@ -10,12 +10,12 @@ For detailed onboarding, please refer to the [User Setup Guide](USER_SETUP_GUIDE
 
 ### Claude Web Projects
 
-1. Upload `adsense-global-audit-skill.md` to your Claude Web Project.
-2. Add `adsense-updates.txt` to the project knowledge base.
+1. Upload `publisher-suite/adsense-global-audit-skill.md` to your Claude Web Project.
+2. Add `publisher-suite/adsense-updates.txt` to the project knowledge base.
 
 ### Local CLAUDE.md
 
-Add the contents of `adsense-global-audit-skill.md` to your repository's `CLAUDE.md` or `.cursorrules` file.
+Add the contents of `publisher-suite/adsense-global-audit-skill.md` to your repository's `CLAUDE.md` or `.cursorrules` file.
 
 ## System Architecture
 
@@ -30,7 +30,7 @@ Add the contents of `adsense-global-audit-skill.md` to your repository's `CLAUDE
             v
 +-----------------------+      +-----------------------+
 |                       |      |                       |
-|  adsense-updates.txt  +----->+ adsense-global-audit- |
+|  publisher-suite/adsense-updates.txt +->+ publisher-suite/adsense-global-audit-|
 |                       |      | skill.md              |
 +-----------------------+      |                       |
                                +-----------+-----------+
@@ -61,7 +61,7 @@ This guide explains how to use the specific files inside this repository to clea
 
 * **The Issue**: Google displays an alert stating you need to fix issues with your `ads.txt` file to prevent severe revenue loss.
 * **The Fix**:
-  1. Open your copy of the `ads.txt` file from this repository.
+  1. Open your copy of the `publisher-suite/ads.txt` file from this repository.
   2. Copy the initialization line: `google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0`.
   3. Swap the `pub-0000000000000000` placeholder out for your true, private **AdSense Publisher ID** (found inside your AdSense Account console panel).
   4. Upload this file directly to your website server's absolute root directory so it registers live at: `https://yourwebsite.com`. Google's crawlers will scan it and clear the alert within 24 to 48 hours.
@@ -70,7 +70,7 @@ This guide explains how to use the specific files inside this repository to clea
 
 * **The Issue**: Dynamic ad placements inject themselves into your site frames unpredictably, pushing content downward and causing policy strikes for accidental click risks.
 * **The Fix**:
-  1. Copy the complete structural layout code inside `premium_anti_cls_wrapper.html`.
+  1. Copy the complete structural layout code inside `publisher-suite/premium_anti_cls_wrapper.html`.
   2. Paste this wrapper directly into your target website HTML files where ads are intended to populate.
   3. Swap out the template publisher ID (`ca-pub-0000000000000000`) with your actual ID. The code reserves a static vertical spacing boundary window beforehand, stabilizing page rendering.
 
@@ -82,7 +82,7 @@ Before launching a new web domain or deploying ad scripts onto a fresh page, you
 
 #### Step 1: Initialize the Audit Engine
 
-Open a brand-new chat interface with Claude. Copy and paste the entire markdown code block from your `adsense-global-audit-skill.md` file into the prompt area, adding this instruction tag at the top:
+Open a brand-new chat interface with Claude. Copy and paste the entire markdown code block from your `publisher-suite/adsense-global-audit-skill.md` file into the prompt area, adding this instruction tag at the top:
 
 ```text
 Initialize this Master Skill Engine into your session memory. Acknowledge when ready.
