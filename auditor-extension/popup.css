@@ -1,126 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;800&family=Share+Tech+Mono&display=swap');
-
 body {
   width: 320px;
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: system-ui, sans-serif;
   margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: #0f172a;
-  color: #f1f5f9;
+  padding: 15px;
 }
-
-.extension-container {
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
-  backdrop-filter: blur(10px);
-}
-
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 10px;
 }
-
-.header h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  background: linear-gradient(to right, #f8fafc, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.badge {
-  background: rgba(14, 165, 233, 0.2);
-  color: #38bdf8;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 10px;
+h2 { font-size: 16px; margin: 0; color: #38bdf8; }
+.badge { font-size: 10px; background: #0284c7; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+.action-zone { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
   font-weight: bold;
-  border: 1px solid rgba(14, 165, 233, 0.4);
-}
-
-.action-zone {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.primary-btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #ec4899, #e11d48);
-  color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+  transition: opacity 0.2s;
 }
-
-.primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
-}
-
-.secondary-btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-}
-
+button:hover { opacity: 0.9; }
+.primary-btn { background-color: #0ea5e9; color: #ffffff; }
+.secondary-btn { background-color: #1e293b; color: #f8fafc; border: 1px solid #475569; }
 .terminal-log {
-  margin-top: 20px;
-  background: #020617;
-  border-radius: 8px;
-  border: 1px solid #334155;
-  padding: 12px;
+  background-color: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 12px;
   min-height: 80px;
   max-height: 150px;
   overflow-y: auto;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: #38bdf8;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
-
-.placeholder-text {
-  color: #64748b;
-  margin: 0;
-}
-.loading { color: #f59e0b; margin: 4px 0; }
-.error { color: #ef4444; margin: 4px 0; }
-.success { color: #10b981; margin: 4px 0; }
-.warning { color: #f59e0b; font-weight: bold; margin: 4px 0; }
-.highlight { color: #e11d48; background: rgba(225, 29, 72, 0.2); padding: 2px 4px; border-radius: 4px; }
+.placeholder-text { color: #64748b; }
+.success { color: #4ade80; font-weight: bold; }
+.warning { color: #fbbf24; font-weight: bold; }
+.error { color: #f87171; font-weight: bold; }
 .risk { color: #ef4444; font-weight: bold; }
-.dim { color: #64748b; font-size: 10px; display: block; margin-top: 4px; }
-ul { margin: 6px 0 0 16px; padding: 0; }
-li { margin-bottom: 6px; }
+ul { padding-left: 15px; margin: 5px 0; color: #cbd5e1; }
+li { margin-bottom: 4px; }
+.highlight { color: #e2e8f0; font-family: monospace; }
+.dim { color: #64748b; font-size: 10px; }
