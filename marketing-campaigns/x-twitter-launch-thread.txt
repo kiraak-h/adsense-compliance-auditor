@@ -1,0 +1,21 @@
+🧵 1/4
+Are you losing Google AdSense revenue without realizing it? 💸
+
+If your ad containers have less than 15px of padding, Google’s automated bots might flag you for clickjacking and shadow-throttle your RPMs.
+
+Here is how you fix it instantly. 👇
+
+🧵 2/4
+We just launched the AdSense Compliance Auditor Pro Chrome Extension! ⚡
+
+Instead of manually checking CSS computed styles, our extension scans your live DOM in 1-click and highlights every high-risk ad container that needs spacing adjustments.
+
+🧵 3/4
+It also automatically crawls your domain root to verify your ads.txt is perfectly mapped for direct Google inventory, ensuring your account relationship token is never broken.
+
+🧵 4/4
+Stop guessing with your monetization strategy. 
+
+Secure your layouts today. 
+🛒 Get the Pro Extension: https://gum.co/YOUR_PRODUCT_ID_HERE
+🌐 Try the Web App: https://kiraak-h.github.io/adsense-compliance-auditor/

@@ -1,0 +1,20 @@
+Title: I built a client-side DOM scanner that flags AdSense layout violations (Clickjacking / Spacing penalties) before Google drops your RPMs.
+
+Hey r/webdev and r/adops,
+
+I've been dealing with a massive headache lately: Google's automated systems shadow-banning or throttling RPMs because of accidental "clickjacking" risks (usually just an ad container having <15px padding next to a clickable button or nav element).
+
+To solve this, I built the AdSense Compliance Auditor Pro Extension. 
+
+Instead of manually inspecting elements across responsive breakpoints, the extension injects a lightweight content script that iterates over `div` and `iframe` nodes, analyzing `window.getComputedStyle()` for layout proximity risks on your live page. 
+
+It also does a clean background fetch for your `ads.txt` to verify Google Direct inventory mapping on the fly.
+
+I wanted to share this with the community because navigating ad compliance as an indie dev is a nightmare. 
+
+**Links & Resources:**
+- 🛒 Pro Extension: https://gum.co/YOUR_PRODUCT_ID_HERE
+- 🌐 Free Web App (Visual Padding Simulator + RPM Calc): https://kiraak-h.github.io/adsense-compliance-auditor/
+- 💻 Repo: https://github.com/kiraak-h/adsense-compliance-auditor
+
+Let me know what you think of the DOM scanning approach! I'd love feedback on how it handles React/Vue virtual DOM layouts.

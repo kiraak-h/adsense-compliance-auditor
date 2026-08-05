@@ -1,5 +1,9 @@
 # 🚀 Multi-User Setup & Deployment Guide
 
+> **Important Live Links**
+> - **🌐 Live Web App**: [https://kiraak-h.github.io/adsense-compliance-auditor/](https://kiraak-h.github.io/adsense-compliance-auditor/)
+> - **🛒 Pro Chrome Extension**: [https://gum.co/YOUR_PRODUCT_ID_HERE](https://gum.co/YOUR_PRODUCT_ID_HERE)
+
 This guide outlines exactly how external developers and publishers can set up and run the **AdSense Compliance Auditor Engine** inside their own workflows.
 
 ---
