@@ -9,7 +9,7 @@ body {
   color: #f1f5f9;
 }
 
-.container {
+.extension-container {
   padding: 20px;
   background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
   backdrop-filter: blur(10px);
@@ -18,18 +18,10 @@ body {
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.logo {
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #ec4899, #3b82f6);
-  border-radius: 6px;
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
 }
 
 .header h2 {
@@ -43,13 +35,23 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.content {
+.badge {
+  background: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+}
+
+.action-zone {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.glow-btn {
+.primary-btn {
   width: 100%;
   padding: 12px;
   border: none;
@@ -66,62 +68,50 @@ body {
   box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
 }
 
-.glow-btn:hover {
+.primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
 }
 
-.glow-btn.secondary {
+.secondary-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
-.glow-btn.secondary:hover {
+.secondary-btn:hover {
+  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
-.terminal {
-  margin-top: 8px;
+.terminal-log {
+  margin-top: 20px;
   background: #020617;
   border-radius: 8px;
   border: 1px solid #334155;
-  overflow: hidden;
-}
-
-.terminal-header {
-  padding: 6px 12px;
-  background: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid #334155;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.dot.red { background: #ef4444; }
-.dot.yellow { background: #f59e0b; }
-.dot.green { background: #10b981; }
-
-.terminal-header .title {
-  margin-left: auto;
-  font-size: 10px;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-#output {
-  margin: 0;
   padding: 12px;
+  min-height: 80px;
+  max-height: 150px;
+  overflow-y: auto;
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
   color: #38bdf8;
   white-space: pre-wrap;
   word-wrap: break-word;
-  max-height: 150px;
-  overflow-y: auto;
+}
+
+.placeholder-text {
+  color: #64748b;
+  margin: 0;
 }

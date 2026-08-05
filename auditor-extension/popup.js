@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const btnScan = document.getElementById('btn-scan');
-  const btnVerify = document.getElementById('btn-verify');
-  const output = document.getElementById('output');
+  const btnScan = document.getElementById('scan-dom-btn');
+  const btnVerify = document.getElementById('verify-ads-btn');
+  const output = document.getElementById('results-panel');
 
   function log(msg, color = '#38bdf8') {
     const span = document.createElement('span');

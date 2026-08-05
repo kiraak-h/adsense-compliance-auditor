@@ -1,28 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="container">
+  <div class="extension-container">
     <div class="header">
-      <div class="logo"></div>
-      <h2>Auditor Pro</h2>
+      <h2>Auditor Pro ⚡</h2>
+      <span class="badge">V3 Engine</span>
     </div>
-    <div class="content">
-      <button id="btn-scan" class="glow-btn">Scan Active DOM Elements</button>
-      <button id="btn-verify" class="glow-btn secondary">Verify Domain Ads.txt</button>
-      
-      <div class="terminal">
-        <div class="terminal-header">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-          <span class="title">Live Output</span>
-        </div>
-        <pre id="output">System Ready...</pre>
-      </div>
+    
+    <div class="action-zone">
+      <button id="scan-dom-btn" class="primary-btn">Scan Active DOM Spacing</button>
+      <button id="verify-ads-btn" class="secondary-btn">Verify Domain Ads.txt</button>
+    </div>
+    
+    <div id="results-panel" class="terminal-log">
+      <p class="placeholder-text">> Awaiting diagnostic scan trigger...</p>
     </div>
   </div>
   <script src="popup.js"></script>
