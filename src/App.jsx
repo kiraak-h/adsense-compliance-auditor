@@ -178,9 +178,10 @@ export default function App() {
           <span className="font-bold text-white tracking-widest uppercase text-sm">AdSense Pro</span>
         </div>
         <a 
-          href="https://gum.co" 
+          href="https://gum.co/YOUR_PRODUCT_ID_HERE" 
           target="_blank" rel="noopener noreferrer"
-          className="glow-btn px-5 py-2 rounded-lg font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all"
+          data-gumroad-overlay-checkout="true"
+          className="gumroad-button glow-btn px-5 py-2 rounded-lg font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all"
         >
           <Download size={16} /> Download Pro Chrome Extension
         </a>
