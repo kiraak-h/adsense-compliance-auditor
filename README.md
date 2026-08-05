@@ -43,6 +43,12 @@ Add the contents of `adsense-global-audit-skill.md` to your repository's `CLAUDE
                                +-----------------------+
 ```
 
+## Media Buying Optimization Suite
+
+The `advertiser-suite/` directory houses master AI skills engineered for active media buyers:
+- **`meta-ads-optimization-engine.md`**: Stops CPA leaks, flags audience overlaps, and audits pixel data loss.
+- **`google-ads-budget-protector.md`**: Protects ROAS via negative keyword anomaly detection and PMax asset fatigue alerts.
+
 ## 📖 How to Clear AdSense Warnings & Run Scans
 
 This guide explains how to use the specific files inside this repository to clear Google AdSense dashboard warnings and audit your new code templates cleanly.

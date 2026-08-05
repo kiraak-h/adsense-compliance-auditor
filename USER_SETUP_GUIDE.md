@@ -11,7 +11,7 @@ This guide outlines exactly how external developers and publishers can set up an
 2. Click **Create Project** and name it `AdSense Optimization Workspace`.
 3. In the right-hand panel of your new project view, click **Set Custom Instructions**.
 4. Navigate to this repository, copy the entire raw codebase from [`adsense-global-audit-skill.md`](./adsense-global-audit-skill.md), paste it into the custom instructions text field, and click **Save**.
-5. *(Optional)*: Download the [`adsense-updates.txt`](./adsense-updates.txt) tracking file from this repo and upload it into your Claude Project's **Knowledge** directory to easily pass future Google policy update logs into your session.
+5. *(Optional)*: Download the [`adsense-updates.txt`](./adsense-updates.txt) tracking file, along with the optimization engines located in [`advertiser-suite/`](./advertiser-suite/), and upload them into your Claude Project's **Knowledge** directory.
 
 ---
 
