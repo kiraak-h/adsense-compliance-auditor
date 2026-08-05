@@ -73,7 +73,7 @@ function Particles({ count = 200 }) {
           transmission={0.9}
           thickness={1}
         />
-        <instancedBufferAttribute attach="attributes-color" args={[colorArray, 3]} />
+        <instancedBufferAttribute attach="instanceColor" args={[colorArray, 3]} />
       </instancedMesh>
     </>
   )

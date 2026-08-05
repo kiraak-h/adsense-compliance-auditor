@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, Copy, ScanSearch, AlertTriangle, AlertCircle, Info } from 'lucide-react'
 import CanvasBackground from './CanvasBackground'
+import logoUrl from './assets/logo.png'
 import './index.css'
 
 export default function App() {
@@ -209,7 +210,7 @@ export default function App() {
         >
           <div className="p-8 border-b border-white/40 bg-white/30 text-center">
             <h1 className="text-4xl font-extrabold flex items-center justify-center gap-4 text-slate-800">
-              <img src="/logo.png" alt="Logo" className="h-12 w-12 object-cover rounded-xl shadow-lg" />
+              <img src={logoUrl} alt="Logo" className="h-12 w-12 object-cover rounded-xl shadow-lg" />
               Auditor Control Center
             </h1>
             <p className="mt-2 text-slate-500 font-medium tracking-wide">Unified compliance payload generator for Claude AI Engines</p>
