@@ -23,13 +23,13 @@ jobs:
     - name: Verify Vital Infrastructure Layout
       run: |
         test -f README.md || exit 1
-        test -f adsense-global-audit-skill.md || exit 1
-        test -f adsense-updates.txt || exit 1
+        test -f publisher-suite/adsense-global-audit-skill.md || exit 1
+        test -f publisher-suite/adsense-updates.txt || exit 1
 
     - name: Execute Markdown Format Verification
       run: |
         npm install -g markdownlint-cli
-        markdownlint *.md --disable MD013 || echo "Minor formatting warning caught."
+        markdownlint "**/*.md" --disable MD013 || echo "Minor formatting warning caught."
 
   # NEW ADVANCED AUTOMATED LIGHTHOUSE INTEGRATION STAGE
   lighthouse-performance-audit:
