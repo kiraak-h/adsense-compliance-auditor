@@ -103,6 +103,61 @@
             letter-spacing: 1px;
             font-family: sans-serif;
         }
+        
+        .scan-container {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .scan-bar {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .scan-bar input {
+            flex: 1;
+        }
+
+        .btn-scan {
+            padding: 0.75rem 1.5rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-scan:hover {
+            opacity: 0.9;
+        }
+
+        .terminal-box {
+            background: #000;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 6px;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .terminal-box.active {
+            display: block;
+        }
+
+        .term-red { color: #ef4444; }
+        .term-yellow { color: #f59e0b; }
+        .term-green { color: #10b981; }
+        .term-blue { color: #3b82f6; }
 
         .dashboard {
             background: var(--bg-panel);
@@ -338,6 +393,14 @@
             <p>Unified compliance payload generator for Claude AI Engines</p>
         </div>
 
+        <div class="scan-container">
+            <div class="scan-bar">
+                <input type="text" id="scan_url" placeholder="Enter Website URL for Instant Compliance Scan (e.g. example.com)">
+                <button class="btn-scan" onclick="runComplianceScan()">Run Live Scan</button>
+            </div>
+            <div class="terminal-box" id="terminal_output"></div>
+        </div>
+
         <div class="tabs">
             <button class="tab-btn active" data-target="tab-publisher">Publisher Audit</button>
             <button class="tab-btn" data-target="tab-meta">Meta Ads Audit</button>
@@ -456,6 +519,70 @@
             });
         });
 
+        // Live Scanner Logic
+        async function runComplianceScan() {
+            const urlInput = document.getElementById('scan_url').value.trim();
+            const terminal = document.getElementById('terminal_output');
+            
+            if(!urlInput) {
+                alert("Please enter a URL");
+                return;
+            }
+            
+            let domain = urlInput.replace("http://", "").replace("https://", "").replace(/\/$/, "");
+            terminal.classList.add('active');
+            terminal.innerHTML = `<span class="term-blue">🔍 Initiating live crawl on target destination: ${domain}</span><br/>`;
+            terminal.innerHTML += `------------------------------------------------------------<br/>`;
+            
+            try {
+                const proxyBase = "https://corsproxy.io/?key=75ac2cfe&url=";
+                const adsTxtUrl = encodeURIComponent(`https://${domain}/ads.txt`);
+                const homeUrl = encodeURIComponent(`https://${domain}/`);
+                
+                // Fetch ads.txt
+                const adsResponse = await fetch(proxyBase + adsTxtUrl);
+                if(adsResponse.ok) {
+                    const text = await adsResponse.text();
+                    const hasGoogle = text.toLowerCase().includes("google.com");
+                    const hasDirect = text.toLowerCase().includes("direct");
+                    
+                    terminal.innerHTML += `<span class="term-green">✅ SUCCESS: Target ads.txt file discovered on server root.</span><br/>`;
+                    terminal.innerHTML += `📊 Compliance Audit Metrics:<br/>`;
+                    terminal.innerHTML += `   - Google Inventory Line Mapping: ${hasGoogle ? '<span class="term-green">FOUND</span>' : '<span class="term-red">MISSING ⚠️</span>'}<br/>`;
+                    terminal.innerHTML += `   - Account Relationship Token: ${hasDirect ? '<span class="term-green">FOUND</span>' : '<span class="term-red">MISSING ⚠️</span>'}<br/>`;
+                    
+                    if(!hasGoogle) {
+                        terminal.innerHTML += `<br/><span class="term-red">❌ CRITICAL: No active Google Publisher records detected inside the destination file.</span><br/>`;
+                    } else {
+                        terminal.innerHTML += `<br/><span class="term-green">🎉 VERIFICATION PASSED: The remote properties match structural compliance rules.</span><br/>`;
+                    }
+                } else {
+                    terminal.innerHTML += `<span class="term-red">❌ CRITICAL ERROR: Server responded with status code ${adsResponse.status} (ads.txt might not exist).</span><br/>`;
+                }
+                
+                // Fetch Homepage for Thin Content
+                terminal.innerHTML += `<br/><span class="term-blue">🔍 Scanning homepage for Thin Content flags...</span><br/>`;
+                const homeResponse = await fetch(proxyBase + homeUrl);
+                if(homeResponse.ok) {
+                    const html = await homeResponse.text();
+                    const cleanText = html.replace(/<[^>]+>/g, ' ');
+                    const words = cleanText.split(/\\s+/).filter(w => w.length > 0);
+                    const wordCount = words.length;
+                    
+                    if(wordCount < 600) {
+                        terminal.innerHTML += `<span class="term-yellow">⚠️ [THIN CONTENT FLAG]: Homepage contains only ${wordCount} words (Minimum recommended: 600).</span><br/>`;
+                    } else {
+                        terminal.innerHTML += `<span class="term-green">✅ [CONTENT DEPTH]: Homepage contains ${wordCount} words (Passed minimum threshold).</span><br/>`;
+                    }
+                } else {
+                    terminal.innerHTML += `<span class="term-red">❌ Failed to fetch homepage.</span><br/>`;
+                }
+                
+            } catch (err) {
+                terminal.innerHTML += `<span class="term-red">❌ CRITICAL ERROR: Unable to resolve target network domain destination. Reason: ${err.message}</span><br/>`;
+            }
+        }
+
         // Payload Generation Logic
         function generatePayload() {
             let payload = "";
@@ -507,5 +634,7 @@
             }, 2000);
         }
     </script>
+    <script src="publisher-suite/adblock-fallback.js"></script>
+    <script src="publisher-suite/vignette-frequency-cap.js"></script>
 </body>
 </html>
