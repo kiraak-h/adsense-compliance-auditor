@@ -115,3 +115,12 @@ body {
   color: #64748b;
   margin: 0;
 }
+.loading { color: #f59e0b; margin: 4px 0; }
+.error { color: #ef4444; margin: 4px 0; }
+.success { color: #10b981; margin: 4px 0; }
+.warning { color: #f59e0b; font-weight: bold; margin: 4px 0; }
+.highlight { color: #e11d48; background: rgba(225, 29, 72, 0.2); padding: 2px 4px; border-radius: 4px; }
+.risk { color: #ef4444; font-weight: bold; }
+.dim { color: #64748b; font-size: 10px; display: block; margin-top: 4px; }
+ul { margin: 6px 0 0 16px; padding: 0; }
+li { margin-bottom: 6px; }

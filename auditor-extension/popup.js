@@ -1,87 +1,76 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const btnScan = document.getElementById('scan-dom-btn');
-  const btnVerify = document.getElementById('verify-ads-btn');
-  const output = document.getElementById('results-panel');
+document.addEventListener("DOMContentLoaded", function () {
+  const scanDomBtn = document.getElementById("scan-dom-btn");
+  const verifyAdsBtn = document.getElementById("verify-ads-btn");
+  const resultsPanel = document.getElementById("results-panel");
 
-  function log(msg, color = '#38bdf8') {
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.textContent = msg + '\n';
-    output.appendChild(span);
-    output.scrollTop = output.scrollHeight;
-  }
-
-  function clearLog() {
-    output.innerHTML = '';
-  }
-
-  btnScan.addEventListener('click', async () => {
-    clearLog();
-    log('Initializing DOM padding analysis...', '#94a3b8');
+  // 1. DOM Element Spacing Scanner Trigger
+  scanDomBtn.addEventListener("click", async () => {
+    resultsPanel.innerHTML = "<p class='loading'>> Inspecting layout safety margins...</p>";
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab || tab.url.startsWith('chrome://')) {
-        log('Error: Cannot scan internal chrome pages.', '#ef4444');
-        return;
-      }
-
-      const results = await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['content.js']
-      });
-
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: runDomAudit
+    }, (results) => {
       if (results && results[0] && results[0].result) {
-        const res = results[0].result;
-        if (res.error) {
-          log('Error: ' + res.error, '#ef4444');
-        } else {
-          log(`Scan complete. Analyzed ${res.totalElements} nodes.`);
-          if (res.risks > 0) {
-            log(`CRITICAL: Found ${res.risks} layout elements with <15px padding/margin. Clickjacking risk detected!`, '#ef4444');
-          } else {
-            log('SUCCESS: All elements passed proximity checks (>15px).', '#10b981');
-          }
-        }
+        renderResults(results[0].result);
+      } else {
+        resultsPanel.innerHTML = "<p class='error'>❌ Internal scripting error. Try refreshing the active webpage.</p>";
       }
-    } catch (e) {
-      log('Execution failed: ' + e.message, '#ef4444');
-    }
+    });
   });
 
-  btnVerify.addEventListener('click', async () => {
-    clearLog();
-    log('Verifying domain ads.txt...', '#94a3b8');
+  // 2. Automated Server Ads.txt Verification Trigger
+  verifyAdsBtn.addEventListener("click", async () => {
+    resultsPanel.innerHTML = "<p class='loading'>> Crawling domain root for verification documents...</p>";
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const url = new URL(tab.url);
+    const adsTxtUrl = `${url.protocol}//${url.hostname}/ads.txt`;
 
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab || tab.url.startsWith('chrome://')) {
-        log('Error: Invalid tab.', '#ef4444');
-        return;
-      }
-
-      const urlObj = new URL(tab.url);
-      const rootUrl = urlObj.protocol + '//' + urlObj.hostname + '/ads.txt';
-      log(`Fetching ${rootUrl}...`);
-
-      const response = await fetch(rootUrl);
-      if (!response.ok) {
-        log(`CRITICAL: Server returned ${response.status}`, '#ef4444');
-        return;
-      }
-
-      const text = await response.text();
-      const hasGoogle = text.toLowerCase().includes('google.com');
-      const hasDirect = text.toLowerCase().includes('direct');
-
-      log(`✅ Found ads.txt (${text.length} bytes)`, '#10b981');
-      if (hasGoogle && hasDirect) {
-        log('✅ Valid Google Direct inventory detected.', '#10b981');
+      const response = await fetch(adsTxtUrl, { method: 'HEAD', timeout: 5000 });
+      if (response.ok) {
+        resultsPanel.innerHTML = `<p class='success'>✅ SUCCESS: Active ads.txt file verified live at root destination.<br><span class='dim'>Target: ${url.hostname}/ads.txt</span></p>`;
       } else {
-        log('⚠️ Warning: Missing Google or Direct records.', '#f59e0b');
+        resultsPanel.innerHTML = `<p class='error'>❌ CRITICAL: Server returned status code ${response.status}. Property missing standard verification records.</p>`;
       }
-    } catch (e) {
-      log('Network Error: ' + e.message, '#ef4444');
+    } catch (err) {
+      resultsPanel.innerHTML = `<p class='error'>❌ NETWORK FAILURE: Domain destination timed out or block active.</p>`;
     }
   });
+
+  function renderResults(data) {
+    if (data.violations.length === 0) {
+      resultsPanel.innerHTML = "<p class='success'>🎉 COMPLIANCE PASSED: All monitored layout nodes match standard padding rules.</p>";
+    } else {
+      let logHtml = `<p class='warning'>⚠️ THE ENGINE DETECTED ${data.violations.length} COMPLIANCE FLAWS:</p><ul>`;
+      data.violations.forEach(v => {
+        logHtml += `<li><span class='highlight'>${v.element}</span> padding is deficient at <span class='risk'>${v.padding}</span></li>`;
+      });
+      logHtml += "</ul>";
+      resultsPanel.innerHTML = logHtml;
+    }
+  }
 });
+
+// Content execution block run directly inside user tab context
+function runDomAudit() {
+  const elements = document.querySelectorAll("header, nav, aside, .ad-container");
+  let violations = [];
+  
+  elements.forEach(el => {
+    const style = window.getComputedStyle(el);
+    const paddingBottom = parseInt(style.paddingBottom) || 0;
+    const marginBottom = parseInt(style.marginBottom) || 0;
+    const totalSpacing = paddingBottom + marginBottom;
+    
+    if (totalSpacing > 0 && totalSpacing < 15) {
+      violations.push({
+        element: el.tagName.toLowerCase() + (el.className ? '.' + el.className.split(' ')[0] : ''),
+        padding: totalSpacing + "px"
+      });
+    }
+  });
+  
+  return { violations: violations };
+}
