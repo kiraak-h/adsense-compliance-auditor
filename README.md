@@ -6,6 +6,8 @@ An automated compliance auditing tool for AdSense implementations.
 
 ## Installation
 
+For detailed onboarding, please refer to the [User Setup Guide](USER_SETUP_GUIDE.md).
+
 ### Claude Web Projects
 
 1. Upload `adsense-global-audit-skill.md` to your Claude Web Project.
