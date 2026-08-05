@@ -667,7 +667,9 @@
                     }
                 } else {
                     terminal.innerHTML += `<span class="term-red">❌ CRITICAL ERROR: Server responded with status code ${adsResponse.status} (ads.txt might not exist).</span><br/>`;
-                        // Fetch CMP Manifest for TCF v2.2 (Google Vendor ID 42)
+                }
+                
+                // Fetch CMP Manifest for TCF v2.2 (Google Vendor ID 42)
                 terminal.innerHTML += `<br/><span class="term-blue">🔍 Scanning for TCF v2.2 Consent Management Platform (CMP)...</span><br/>`;
                 const cmpUrl = encodeURIComponent(`https://${domain}/cmp_manifest.json`);
                 try {
