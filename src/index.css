@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+@layer base {
+  body {
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    color: #0f172a;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+}
+
+.glow-btn {
+  background: linear-gradient(135deg, #ec4899, #0ea5e9);
+  color: white;
+  transition: all 0.2s;
+}
+
+.glow-btn:hover {
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+  transform: translateY(-2px);
+}
