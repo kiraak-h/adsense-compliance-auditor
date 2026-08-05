@@ -399,6 +399,7 @@
                 <button class="btn-scan" onclick="runComplianceScan()">Run Live Scan</button>
             </div>
             <div class="terminal-box" id="terminal_output"></div>
+            <button class="btn-copy" id="btn_download" style="display:none; align-self: flex-start; margin-top: 0.5rem;" onclick="downloadReport()">Download Report</button>
         </div>
 
         <div class="tabs">
@@ -558,15 +559,40 @@
                     }
                 } else {
                     terminal.innerHTML += `<span class="term-red">❌ CRITICAL ERROR: Server responded with status code ${adsResponse.status} (ads.txt might not exist).</span><br/>`;
+                        // Fetch CMP Manifest for TCF v2.2 (Google Vendor ID 42)
+                terminal.innerHTML += `<br/><span class="term-blue">🔍 Scanning for TCF v2.2 Consent Management Platform (CMP)...</span><br/>`;
+                const cmpUrl = encodeURIComponent(`https://${domain}/cmp_manifest.json`);
+                try {
+                    const cmpResponse = await fetch(proxyBase + cmpUrl);
+                    if(cmpResponse.ok) {
+                        const cmpText = await cmpResponse.text();
+                        if (cmpText.includes('"42"') || cmpText.includes('vendor": 42') || cmpText.includes('vendor":42')) {
+                            terminal.innerHTML += `<span class="term-green">✅ [TCF v2.2]: Google Advertising Products (Vendor 42) properly declared in CMP.</span><br/>`;
+                        } else {
+                            terminal.innerHTML += `<span class="term-yellow">⚠️ [TCF v2.2]: CMP found but Google Vendor 42 not explicitly detected.</span><br/>`;
+                        }
+                    } else {
+                         terminal.innerHTML += `<span class="term-yellow">⚠️ [TCF v2.2]: No standard /cmp_manifest.json found. Ensure a certified CMP is installed.</span><br/>`;
+                    }
+                } catch(e) {
+                     terminal.innerHTML += `<span class="term-yellow">⚠️ [TCF v2.2]: Could not verify CMP manifest.</span><br/>`;
                 }
-                
-                // Fetch Homepage for Thin Content
-                terminal.innerHTML += `<br/><span class="term-blue">🔍 Scanning homepage for Thin Content flags...</span><br/>`;
+
+                // Fetch Homepage for Thin Content & Clickjacking
+                terminal.innerHTML += `<br/><span class="term-blue">🔍 Scanning homepage for Thin Content and Clickjacking risks...</span><br/>`;
                 const homeResponse = await fetch(proxyBase + homeUrl);
                 if(homeResponse.ok) {
                     const html = await homeResponse.text();
-                    const cleanText = html.replace(/<[^>]+>/g, ' ');
-                    const words = cleanText.split(/\\s+/).filter(w => w.length > 0);
+                    
+                    // Secure HTML Parsing via DOMParser
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Remove scripts and styles for accurate word count
+                    doc.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+                    
+                    const cleanText = doc.body ? doc.body.textContent : "";
+                    const words = cleanText.split(/\s+/).filter(w => w.length > 0);
                     const wordCount = words.length;
                     
                     if(wordCount < 600) {
@@ -574,12 +600,61 @@
                     } else {
                         terminal.innerHTML += `<span class="term-green">✅ [CONTENT DEPTH]: Homepage contains ${wordCount} words (Passed minimum threshold).</span><br/>`;
                     }
+
+                    // Clickjacking/Proximity Check (Heuristic)
+                    let hasClickjackingRisk = false;
+                    const adUnits = doc.querySelectorAll('.adsbygoogle, iframe');
+                    if (adUnits.length > 0) {
+                        let lowPaddingFound = false;
+                        let minPadding = 999;
+                        
+                        adUnits.forEach(ad => {
+                            const style = ad.getAttribute('style') || '';
+                            const marginMatch = style.match(/margin(?:-bottom|-top)?\s*:\s*(\d+)px/i);
+                            const paddingMatch = style.match(/padding(?:-bottom|-top)?\s*:\s*(\d+)px/i);
+                            
+                            if (marginMatch && parseInt(marginMatch[1]) < 10) { lowPaddingFound = true; minPadding = Math.min(minPadding, parseInt(marginMatch[1])); }
+                            if (paddingMatch && parseInt(paddingMatch[1]) < 10) { lowPaddingFound = true; minPadding = Math.min(minPadding, parseInt(paddingMatch[1])); }
+                        });
+
+                        if (lowPaddingFound) {
+                            terminal.innerHTML += `<span class="term-red">❌ [CLICKJACKING RISK]: Ad units found with dangerously low spacing (${minPadding}px). Minimum 10px required to prevent accidental clicks.</span><br/>`;
+                            hasClickjackingRisk = true;
+                        } else {
+                            terminal.innerHTML += `<span class="term-green">✅ [AD PROXIMITY]: Ad units have sufficient spacing or use external CSS.</span><br/>`;
+                        }
+                    } else {
+                         terminal.innerHTML += `<span class="term-blue">ℹ️ [AD PROXIMITY]: No standard ad units with inline styles detected for proximity check.</span><br/>`;
+                    }
+
+                    // Automated Payload Syncing
+                    document.getElementById('pub_words').value = wordCount;
+                    if (hasClickjackingRisk) document.getElementById('pub_padding').value = "4";
+                    else document.getElementById('pub_padding').value = "15";
+
                 } else {
                     terminal.innerHTML += `<span class="term-red">❌ Failed to fetch homepage.</span><br/>`;
                 }
                 
+                document.getElementById('btn_download').style.display = 'block';
+                
             } catch (err) {
                 terminal.innerHTML += `<span class="term-red">❌ CRITICAL ERROR: Unable to resolve target network domain destination. Reason: ${err.message}</span><br/>`;
+            }
+        }
+
+        // Download Report logic
+        function downloadReport() {
+            const terminal = document.getElementById('terminal_output');
+            const rawText = terminal.innerText || terminal.textContent;
+            const blob = new Blob([rawText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'AdSense_Compliance_Report.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }e}</span><br/>`;
             }
         }
 
