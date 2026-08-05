@@ -19,3 +19,12 @@ jobs:
       run: npm install -g markdownlint-cli
     - name: Run Markdownlint
       run: markdownlint '**/*.md'
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Audit Performance and CLS with Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          temporaryPublicStorage: true
