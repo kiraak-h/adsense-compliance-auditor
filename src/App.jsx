@@ -178,7 +178,7 @@ export default function App() {
           <span className="font-bold text-white tracking-widest uppercase text-sm">AdSense Pro</span>
         </div>
         <a 
-          href="https://github.com/kiraak-h/adsense-compliance-auditor/tree/main/auditor-extension" 
+          href="https://gum.co" 
           target="_blank" rel="noopener noreferrer"
           className="glow-btn px-5 py-2 rounded-lg font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all"
         >
