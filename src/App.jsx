@@ -183,9 +183,9 @@ export default function App() {
           <div className="glass-panel p-6 rounded-2xl">
             <h3 className="text-xl font-bold mb-4 text-pink-500 uppercase tracking-widest text-shadow-sm">Compliance Partners</h3>
             <div className="flex flex-col gap-3">
-              <a href="#" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Generate Privacy Policy ↗</a>
-              <a href="#" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Cookie Consent Banner ↗</a>
-              <a href="#" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Secure Hosting Platform ↗</a>
+              <a href="https://www.privacypolicies.com/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Generate Privacy Policy ↗</a>
+              <a href="https://www.cookiebot.com/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Cookie Consent Banner ↗</a>
+              <a href="https://vercel.com/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/50 hover:bg-white/80 border border-white/60 rounded-lg text-slate-800 font-semibold transition-all shadow-sm hover:shadow-md">Secure Hosting Platform ↗</a>
             </div>
           </div>
           
