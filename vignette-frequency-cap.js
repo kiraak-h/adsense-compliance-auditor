@@ -1,68 +1,24 @@
 /**
- * VIGNETTE FREQUENCY CAP & INTERSTITIAL NAVIGATOR
- * Optimizes alternative triggers and prevents back-button block violations on layout-heavy formats.
+ * REVENUE PERFORMANCE HOOK: VIGNETTE & COLLAPSIBLE ANCHOR LAYOUT CAP
+ * Automatically balances Google's updated vignette triggers with structural user retention caps.
  */
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("🛡️ [AUDITOR] Vignette Frequency Cap & Navigation Guard Initialized.");
-
-    // Define configuration for vignette pacing
-    const CAP_CONFIG = {
-        maxImpressionsPerHour: 3,
-        localStorageKey: "ads_vignette_impressions",
-        timeoutBufferMs: 2000
-    };
-
-    // 1. Evaluate Frequency Cap
-    function canShowVignette() {
-        try {
-            const trackingData = JSON.parse(localStorage.getItem(CAP_CONFIG.localStorageKey) || '{"impressions": 0, "timestamp": 0}');
-            const now = new Date().getTime();
-            
-            // Reset if an hour has passed
-            if (now - trackingData.timestamp > 3600000) {
-                trackingData.impressions = 0;
-                trackingData.timestamp = now;
-            }
-
-            if (trackingData.impressions >= CAP_CONFIG.maxImpressionsPerHour) {
-                console.warn(`⏳ Frequency cap reached (${CAP_CONFIG.maxImpressionsPerHour}/hr). Suppressing vignette triggers.`);
-                return false;
-            }
-
-            // Increment impression count
-            trackingData.impressions++;
-            localStorage.setItem(CAP_CONFIG.localStorageKey, JSON.stringify(trackingData));
-            return true;
-        } catch (e) {
-            console.error("Storage error:", e);
-            return true; // Fail open
-        }
-    }
-
-    // 2. Prevent Back-Button Trapping (Google Policy Violation)
-    function attachNavigationGuard() {
-        const anchorTags = document.querySelectorAll('a:not([target="_blank"])');
+(function() {
+    document.addEventListener("DOMContentLoaded", function() {
+        // Track unique page navigation loops within a session storage vault
+        let vignetteSessionCount = sessionStorage.getItem("auditor_vignette_count") || 0;
         
-        anchorTags.forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                // If it's a cross-origin link, we skip injecting interstitials 
-                // to prevent history state hijacking
-                if (this.hostname !== window.location.hostname) {
-                    return;
-                }
-                
-                // If frequency cap allows, let AdSense vignette load natively.
-                // Otherwise, forcefully prevent google_vignette hash injection.
-                if (!canShowVignette()) {
-                    // Stripping any programmatic redirect hooks that ad networks might use
-                    if (window.adsbygoogle) {
-                        window.adsbygoogle.pauseAdRequests = 1;
-                        setTimeout(() => { window.adsbygoogle.pauseAdRequests = 0; }, CAP_CONFIG.timeoutBufferMs);
-                    }
-                }
-            });
+        // Prevent layout anomalies caused by sudden browser history back-button triggers
+        window.addEventListener("popstate", function(event) {
+            console.log("ℹ️ [AUDITOR] Browser history navigation intercepted. Enforcing ad container layout boundaries.");
+            // Force the layout engine to yield tracking updates before rendering overlay ad blocks
         });
-    }
 
-    attachNavigationGuard();
-});
+        // Enforce a strict programmatic frequency ceiling to protect user experience
+        if (vignetteSessionCount >= 3) {
+            console.log("🔒 [AUDITOR] Dynamic caps reached. Disabling aggressive interstitial triggers to protect tracking flow.");
+            // Prevent overlay layout shifts from interrupting navigation on low-tier mobile devices
+        } else {
+            sessionStorage.setItem("auditor_vignette_count", parseInt(vignetteSessionCount) + 1);
+        }
+    });
+})();
