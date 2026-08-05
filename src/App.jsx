@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Copy, ScanSearch, AlertTriangle, AlertCircle, Info } from 'lucide-react'
+import { CheckCircle2, Copy, ScanSearch, AlertTriangle, AlertCircle, Info, Download } from 'lucide-react'
 import CanvasBackground from './CanvasBackground'
 import logoUrl from './assets/logo.png'
 import './index.css'
@@ -18,6 +18,7 @@ export default function App() {
   const [pubWords, setPubWords] = useState(380)
   const [pubPadding, setPubPadding] = useState(4)
   const [pubLegal, setPubLegal] = useState("Missing Privacy Policy")
+  const [pubId, setPubId] = useState("pub-0000000000000000")
 
   // States for Meta
   const [metaHook, setMetaHook] = useState(9.2)
@@ -270,26 +271,78 @@ export default function App() {
 
           <div className="p-8 bg-white/10 flex-1">
             {activeTab === 'publisher' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase">Indexable Articles</label>
-                  <input type="number" className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm" value={pubArticles} onChange={e => setPubArticles(e.target.value)} />
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-8">
+                {/* Visual Ad Padding Simulator */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+                    <h3 className="text-xl font-bold text-slate-700">Visual Layout Padding</h3>
+                    <p className="text-sm text-slate-500">Scale the slider to preview AdSense container clearance rules.</p>
+                    <input type="range" min="0" max="50" step="1" className="accent-pink-500" value={pubPadding} onChange={e => setPubPadding(e.target.value)} />
+                    <div className="mt-4 bg-slate-200 rounded-lg overflow-hidden border border-slate-300 relative flex items-center justify-center min-h-[150px]">
+                      <motion.div 
+                        animate={{ padding: `${pubPadding}px` }} 
+                        className="bg-sky-100 rounded border border-sky-300 w-full h-full flex flex-col items-center justify-center"
+                      >
+                        <div className="bg-white/80 p-4 border border-dashed border-sky-400 w-[80%] text-center text-xs font-mono text-slate-500 shadow-sm">
+                          AdSense Block
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* RPM Calculator */}
+                  <div className="glass-panel p-6 rounded-2xl flex flex-col gap-4 bg-gradient-to-br from-white/60 to-pink-50/60 border-pink-200/50">
+                    <h3 className="text-xl font-bold text-slate-700 flex justify-between items-center">
+                      RPM Calculator <span className="text-emerald-500 font-mono text-2xl">${((Number(pubWords)/500) * 1.2 + (Number(pubPadding) > 15 ? 2.5 : 0.5)).toFixed(2)}</span>
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4 mt-2">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold text-slate-500 uppercase">Avg Words/Page</label>
+                        <input type="number" className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm focus:ring-pink-300 focus:outline-none" value={pubWords} onChange={e => setPubWords(e.target.value)} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold text-slate-500 uppercase">Articles</label>
+                        <input type="number" className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm focus:ring-pink-300 focus:outline-none" value={pubArticles} onChange={e => setPubArticles(e.target.value)} />
+                      </div>
+                    </div>
+                    <div className="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800">
+                      💡 {Number(pubPadding) > 15 ? "+$2.50 RPM Lift achieved via safe layout spacing!" : "Warning: Low padding creates clickjacking risk. Increase padding for RPM lift."}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase">Average Word Count</label>
-                  <input type="number" className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm" value={pubWords} onChange={e => setPubWords(e.target.value)} />
-                </div>
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase">Navigation Padding (px)</label>
-                  <input type="number" className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm" value={pubPadding} onChange={e => setPubPadding(e.target.value)} />
-                </div>
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase">Legal Pages Status</label>
-                  <select className="p-3 rounded-xl bg-white/70 border border-white/60 font-mono shadow-sm" value={pubLegal} onChange={e => setPubLegal(e.target.value)}>
-                    <option>Missing Privacy Policy</option>
-                    <option>Fully Compliant</option>
-                    <option>Missing Terms of Service</option>
-                  </select>
+
+                {/* Custom Ads.txt Terminal */}
+                <div className="glass-panel p-6 rounded-2xl flex flex-col gap-4 bg-slate-900 border-slate-700 text-slate-300">
+                  <h3 className="text-xl font-bold text-sky-400 flex items-center gap-2">Ads.txt Generator</h3>
+                  <div className="flex gap-4 items-end">
+                    <div className="flex-1 flex flex-col gap-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Publisher ID</label>
+                      <input 
+                        type="text" 
+                        className="p-3 rounded-xl bg-slate-800 border border-slate-600 font-mono text-sky-300 focus:ring-sky-500 focus:outline-none" 
+                        value={pubId} 
+                        onChange={e => setPubId(e.target.value)} 
+                      />
+                    </div>
+                    <button 
+                      onClick={() => {
+                        const content = `google.com, ${pubId}, DIRECT, f08c47fec0942fa0`;
+                        const blob = new Blob([content], { type: 'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'ads.txt';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                      className="glow-btn px-6 py-3 rounded-xl font-bold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.3)]"
+                    >
+                      <Download size={18} /> Download
+                    </button>
+                  </div>
+                  <pre className="mt-2 p-4 bg-slate-950 rounded-xl font-mono text-sm text-emerald-400 border border-slate-800 shadow-inner">
+                    google.com, {pubId}, DIRECT, f08c47fec0942fa0
+                  </pre>
                 </div>
               </motion.div>
             )}
