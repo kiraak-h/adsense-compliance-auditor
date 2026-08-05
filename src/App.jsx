@@ -171,6 +171,21 @@ export default function App() {
     <>
       <CanvasBackground />
       
+      {/* Top Navigation / CTA */}
+      <nav className="relative z-20 w-full bg-slate-900/60 backdrop-blur-md border-b border-white/10 px-6 py-4 flex justify-between items-center shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-sky-500 shadow-[0_0_15px_rgba(236,72,153,0.5)]"></div>
+          <span className="font-bold text-white tracking-widest uppercase text-sm">AdSense Pro</span>
+        </div>
+        <a 
+          href="https://github.com/kiraak-h/adsense-compliance-auditor/tree/main/auditor-extension" 
+          target="_blank" rel="noopener noreferrer"
+          className="glow-btn px-5 py-2 rounded-lg font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all"
+        >
+          <Download size={16} /> Download Pro Chrome Extension
+        </a>
+      </nav>
+
       <div className="relative z-10 max-w-7xl mx-auto p-4 md:p-8 flex flex-col md:flex-row gap-8">
         
         {/* Sidebar */}

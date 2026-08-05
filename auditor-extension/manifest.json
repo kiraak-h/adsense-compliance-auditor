@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "AdSense Compliance Auditor Pro",
+  "version": "1.0",
+  "description": "Premium developer tools for analyzing DOM spacing and verifying Ads.txt directly on active publisher sites.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auditor Pro"
+  }
+}
