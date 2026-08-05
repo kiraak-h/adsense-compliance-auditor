@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdSense Auditor Engine - Control Center</title>
+    <!-- Initialize Core Asynchronous Google AdSense Architecture -->
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .sidebar {
+            flex: 0 0 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .monetization-panel {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .monetization-panel h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .affiliate-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .affiliate-link {
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .affiliate-link:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Fixes Cumulative Layout Shift (CLS) */
+        .adsense-placement-guard {
+            min-height: 250px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #0f172a;
+            border: 1px dashed #334155;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .adsense-placement-guard::before {
+            content: "Advertisement";
+            font-size: 11px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: sans-serif;
+        }
+
+        .dashboard {
+            background: var(--bg-panel);
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: #151e2e;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1.25rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: var(--bg-panel);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .tab-content.active {
+            display: grid;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 0.5rem;
+            accent-color: var(--primary);
+        }
+
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .range-value {
+            font-family: monospace;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .actions {
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            background: #182235;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-generate:hover {
+            background: var(--primary-hover);
+        }
+
+        .output-container {
+            display: none;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-dark);
+        }
+
+        .output-container.active {
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            background: #0f172a;
+            color: #a78bfa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
+        .btn-copy {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--border);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: #475569;
+        }
+
+        .btn-copy.success {
+            background: var(--success);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="monetization-panel">
+            <h3>Compliance Partners</h3>
+            <div class="affiliate-links">
+                <a href="https://example.com/privacy-generator?affid=placeholder_compliance" class="affiliate-link" target="_blank">Generate Privacy Policy ↗</a>
+                <a href="https://example.com/cookie-consent?affid=placeholder_compliance" class="affiliate-link" target="_blank">Cookie Consent Banner ↗</a>
+                <a href="https://example.com/hosting?affid=placeholder_compliance" class="affiliate-link" target="_blank">Secure Hosting Platform ↗</a>
+            </div>
+        </div>
+        
+        <div class="monetization-panel" style="padding: 1rem;">
+            <!-- Safe Implementation Insertion Point -->
+            <div class="adsense-placement-guard">
+                <!-- Google Auto Ads or standard responsive ad units will safely mount within this container -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-0000000000000000"
+                     data-ad-slot="auto"
+                     data-ad-format="vertical"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="header">
+            <h1>Auditor Control Center</h1>
+            <p>Unified compliance payload generator for Claude AI Engines</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="tab-publisher">Publisher Audit</button>
+            <button class="tab-btn" data-target="tab-meta">Meta Ads Audit</button>
+            <button class="tab-btn" data-target="tab-google">Google Ads Audit</button>
+        </div>
+
+        <!-- Publisher Audit -->
+        <div class="tab-content active" id="tab-publisher">
+            <div class="form-group">
+                <label>Total Indexable Articles</label>
+                <input type="number" id="pub_articles" value="7" min="0">
+            </div>
+            <div class="form-group">
+                <label>Average Word Count</label>
+                <input type="number" id="pub_words" value="380" min="0">
+            </div>
+            <div class="form-group full-width">
+                <label>Navigation Padding/Margin (px)</label>
+                <input type="number" id="pub_padding" value="4" min="0">
+            </div>
+            <div class="form-group full-width">
+                <label>Legal Pages Status</label>
+                <select id="pub_legal">
+                    <option value="Missing Privacy Policy">Missing Privacy Policy</option>
+                    <option value="Fully Compliant">Fully Compliant</option>
+                    <option value="Missing Terms of Service">Missing Terms of Service</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Meta Ads Audit -->
+        <div class="tab-content" id="tab-meta">
+            <div class="form-group full-width">
+                <div class="range-header">
+                    <label>Hook Rate (%)</label>
+                    <span class="range-value" id="val_hook">9.2%</span>
+                </div>
+                <input type="range" id="meta_hook" min="0" max="100" step="0.1" value="9.2" oninput="document.getElementById('val_hook').textContent = this.value + '%'">
+            </div>
+            <div class="form-group full-width">
+                <div class="range-header">
+                    <label>Hold Rate (%)</label>
+                    <span class="range-value" id="val_hold">1.1%</span>
+                </div>
+                <input type="range" id="meta_hold" min="0" max="100" step="0.1" value="1.1" oninput="document.getElementById('val_hold').textContent = this.value + '%'">
+            </div>
+            <div class="form-group">
+                <label>Creative Frequency (7-day)</label>
+                <input type="number" id="meta_freq" value="4.1" step="0.1" min="1">
+            </div>
+            <div class="form-group">
+                <label>Weekly Conversions</label>
+                <input type="number" id="meta_conv" value="18" min="0">
+            </div>
+        </div>
+
+        <!-- Google Ads Audit -->
+        <div class="tab-content" id="tab-google">
+            <div class="form-group full-width">
+                <label>High-Bleed Search Term (Zero Conversions)</label>
+                <input type="text" id="ggl_term" value="free software download pdf" placeholder="e.g. cheap free alternatives">
+            </div>
+            <div class="form-group">
+                <label>Target CPA Multiplier Spent</label>
+                <input type="number" id="ggl_cpa" value="2.5" step="0.1" min="0">
+            </div>
+            <div class="form-group">
+                <label>PMax Brand Spend (%)</label>
+                <select id="ggl_pmax">
+                    <option value="40%">40%</option>
+                    <option value="< 10%">< 10%</option>
+                    <option value="20%">20%</option>
+                    <option value="80%">80%</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label>RSA Relevance Score</label>
+                <select id="ggl_rsa">
+                    <option value="Below Average">Below Average</option>
+                    <option value="Average">Average</option>
+                    <option value="Above Average">Above Average</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-generate" onclick="generatePayload()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Generate Audit Payload
+            </button>
+        </div>
+
+        <div class="output-container" id="output_section">
+            <label style="margin-bottom: 0.5rem; display: block; color: var(--primary);">Generated Claude Payload</label>
+            <textarea id="payload_output" readonly></textarea>
+            <button class="btn-copy" id="copy_btn" onclick="copyPayload()">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching Logic
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        let currentMode = 'publisher';
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.target).classList.add('active');
+                
+                currentMode = tab.dataset.target.replace('tab-', '');
+                document.getElementById('output_section').classList.remove('active');
+            });
+        });
+
+        // Payload Generation Logic
+        function generatePayload() {
+            let payload = "";
+
+            if (currentMode === 'publisher') {
+                payload = `Execute AdSense Compliance Audit on the following layout data:\n\n` +
+                          `- Total Indexable Articles: ${document.getElementById('pub_articles').value} posts\n` +
+                          `- Average Word Count: ${document.getElementById('pub_words').value} words per node\n` +
+                          `- Navigation Padding/Margin: ${document.getElementById('pub_padding').value}px above ad containers\n` +
+                          `- Legal Pages Status: ${document.getElementById('pub_legal').value}`;
+            } 
+            else if (currentMode === 'meta') {
+                payload = `Execute Meta Ads Optimization Audit on the following data:\n\n` +
+                          `- Hook Rate (3-Sec Views / Impressions): ${document.getElementById('meta_hook').value}%\n` +
+                          `- Hold Rate (ThruPlays / Impressions): ${document.getElementById('meta_hold').value}%\n` +
+                          `- Creative Frequency (7-day): ${document.getElementById('meta_freq').value}\n` +
+                          `- Weekly conversions per ad set: ${document.getElementById('meta_conv').value} conversions`;
+            } 
+            else if (currentMode === 'google') {
+                payload = `Execute Google Ads Budget Protection Audit on the following data:\n\n` +
+                          `- Query "${document.getElementById('ggl_term').value}" has spent ${document.getElementById('ggl_cpa').value}x of our target CPA with 0 conversions.\n` +
+                          `- Responsive Search Ad Relevance score is "${document.getElementById('ggl_rsa').value}".\n` +
+                          `- PMax campaign is spending ${document.getElementById('ggl_pmax').value} of its budget on our own brand name search keywords.`;
+            }
+
+            const outputBox = document.getElementById('payload_output');
+            outputBox.value = payload;
+            document.getElementById('output_section').classList.add('active');
+            
+            // Reset copy button
+            const copyBtn = document.getElementById('copy_btn');
+            copyBtn.textContent = 'Copy to Clipboard';
+            copyBtn.classList.remove('success');
+        }
+
+        // Copy to Clipboard
+        function copyPayload() {
+            const outputBox = document.getElementById('payload_output');
+            outputBox.select();
+            document.execCommand('copy');
+            
+            const copyBtn = document.getElementById('copy_btn');
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('success');
+            
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy to Clipboard';
+                copyBtn.classList.remove('success');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
