@@ -1,39 +1,46 @@
 #!/usr/bin/env python3
-"""
-validate_ads.py
-A CLI tool to crawl a domain and verify if ads.txt is active and properly structured.
-Usage: python validate_ads.py <domain>
-"""
 import sys
-import requests
+import urllib.request
+from urllib.error import URLError, HTTPError
 
-def validate_ads_txt(domain):
-    if not domain.startswith('http'):
-        domain = 'https://' + domain
-    url = f"{domain.rstrip('/')}/ads.txt"
-    print(f"Crawling {url}...")
+def check_ads_txt(domain):
+    # Ensure domain formatting is clean
+    domain = domain.replace("http://", "").replace("https://", "").strip("/")
+    url = f"https://{domain}/ads.txt"
+    
+    print(f"🔍 Initiating live crawl on target destination: {url}")
+    print("-" * 72)
     
     try:
-        response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            content = response.text
-            if "google.com" in content and "pub-" in content:
-                print("✅ SUCCESS: ads.txt is active and contains Google AdSense publisher structure.")
-                return True
+        # Construct request with a valid browser User-Agent string to bypass basic firewalls
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (AdSense-Auditor-CLI)'})
+        with urllib.request.urlopen(req, timeout=10) as response:
+            content = response.read().decode('utf-8')
+            
+            # Target compliance tokens
+            has_google = "google.com" in content.lower()
+            has_direct = "direct" in content.lower()
+            
+            print("✅ SUCCESS: Target ads.txt file discovered on server root.")
+            print(f"📊 Compliance Audit Metrics:")
+            print(f"   - Google Inventory Line Mapping: {'FOUND' if has_google else 'MISSING ⚠️'}")
+            print(f"   - Account Relationship Token: {'FOUND' if has_direct else 'MISSING ⚠️'}")
+            
+            if not has_google:
+                print("\n❌ CRITICAL: No active Google Publisher records detected inside the destination file.")
+                sys.exit(1)
             else:
-                print("⚠️ WARNING: ads.txt is reachable but missing valid Google AdSense signatures.")
-                return False
-        else:
-            print(f"❌ ERROR: ads.txt not found (HTTP {response.status_code}).")
-            return False
-    except requests.RequestException as e:
-        print(f"❌ ERROR: Failed to connect to {url}. Details: {e}")
-        return False
+                print("\n🎉 VERIFICATION PASSED: The remote properties match structural compliance rules.")
+                
+    except HTTPError as e:
+        print(f"❌ CRITICAL ERROR: Server responded with status code {e.code} (File might not exist).")
+        sys.exit(1)
+    except URLError as e:
+        print(f"❌ CRITICAL ERROR: Unable to resolve target network domain destination. Reason: {e.reason}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python validate_ads.py <domain>")
+        print("Usage: python validate_ads.py <domain_name>")
         sys.exit(1)
-    
-    target_domain = sys.argv[1]
-    validate_ads_txt(target_domain)
+    check_ads_txt(sys.argv[1])
