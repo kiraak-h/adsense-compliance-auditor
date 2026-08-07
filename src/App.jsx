@@ -32,6 +32,11 @@ export default function App() {
   const [gglPmax, setGglPmax] = useState("40%")
   const [gglRsa, setGglRsa] = useState("Below Average")
 
+  // States for Enterprise
+  const [entSitemap, setEntSitemap] = useState('https://example.com/sitemap.xml')
+  const [entVendors, setEntVendors] = useState('42, 137, 204')
+  const [entRac, setEntRac] = useState('best laptops, mechanical keyboard')
+
   const addLog = (msg, type = 'info') => {
     setLogs(prev => [...prev, { id: Date.now() + Math.random(), msg, type }])
   }
@@ -156,6 +161,11 @@ export default function App() {
           `- Query "${gglTerm}" has spent ${gglCpa}x of our target CPA with 0 conversions.\n` +
           `- Responsive Search Ad Relevance score is "${gglRsa}".\n` +
           `- PMax campaign is spending ${gglPmax} of its budget on our own brand name search keywords.`
+    } else if (activeTab === 'enterprise') {
+      p = `Execute Enterprise Compliance Payload:\n\n` +
+          `- Crawl Sitemap: ${entSitemap}\n` +
+          `- ATP Consent Check: Vendors ${entVendors}\n` +
+          `- RAC Literal Terms: ${entRac}`
     }
     setPayload(p)
     setCopied(false)
@@ -274,7 +284,7 @@ export default function App() {
           </div>
 
           <div className="flex bg-white/40 border-b border-white/50">
-            {['publisher', 'meta', 'google'].map(tab => (
+            {['publisher', 'meta', 'google', 'enterprise'].map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -410,6 +420,53 @@ export default function App() {
                     <option>Average</option>
                     <option>Above Average</option>
                   </select>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'enterprise' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-6">
+                <div className="glass-panel p-6 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white border-sky-500/50 shadow-xl">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-sky-400">🚀 Enterprise Compliance Suite</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Tool 1 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300 flex items-center gap-2">CLS Tracer</h4>
+                      <p className="text-xs text-slate-400 mt-1">Live Layout Shift HUD injected via Pro extension.</p>
+                      <pre className="mt-2 text-[10px] bg-slate-950 p-2 rounded text-emerald-400 overflow-hidden border border-slate-800">window.clsValue = ...</pre>
+                    </div>
+                    {/* Tool 2 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300">Sitemap Crawler</h4>
+                      <input type="text" className="w-full mt-2 p-2 rounded bg-slate-900 border border-slate-600 text-xs font-mono text-slate-300 focus:outline-none focus:border-sky-500" value={entSitemap} onChange={(e)=>setEntSitemap(e.target.value)} />
+                      <p className="text-[10px] text-slate-400 mt-2">Flags low-value content (&lt;600 words) across XML tree.</p>
+                    </div>
+                    {/* Tool 3 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300">ATP Live Checker</h4>
+                      <input type="text" className="w-full mt-2 p-2 rounded bg-slate-900 border border-slate-600 text-xs font-mono text-slate-300 focus:outline-none focus:border-sky-500" value={entVendors} onChange={(e)=>setEntVendors(e.target.value)} />
+                      <p className="text-[10px] text-slate-400 mt-2">Validates TCF strings against Google ATP Manifest.</p>
+                    </div>
+                    {/* Tool 4 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300">RAC Transcriber</h4>
+                      <input type="text" className="w-full mt-2 p-2 rounded bg-slate-900 border border-slate-600 text-xs font-mono text-slate-300 focus:outline-none focus:border-sky-500" value={entRac} onChange={(e)=>setEntRac(e.target.value)} />
+                      <p className="text-[10px] text-slate-400 mt-2">URL-encodes referrerAdCreative RSFC payloads.</p>
+                    </div>
+                    {/* Tool 5 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300">Vignette Shield</h4>
+                      <p className="text-xs text-slate-400 mt-1">Intercepts history API to cap full-screen ad loads.</p>
+                      <pre className="mt-2 text-[10px] bg-slate-950 p-2 rounded text-emerald-400 overflow-hidden border border-slate-800">history.pushState = ...</pre>
+                    </div>
+                    {/* Tool 6 */}
+                    <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                      <h4 className="font-bold text-sky-300">Ad Intents UI</h4>
+                      <p className="text-xs text-slate-400 mt-1">Simulates Gemini Contextual Matching layout bounds.</p>
+                      <a href="./ad_intents_mockup.html" target="_blank" className="mt-2 inline-block bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] px-3 py-1.5 rounded transition-all">Launch Preview Mockup</a>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
