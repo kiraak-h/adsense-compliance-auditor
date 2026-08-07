@@ -26,3 +26,38 @@ To use the Developer Extension locally:
 2. Open Chrome and navigate to `chrome://extensions`.
 3. Enable **Developer Mode**.
 4. Click **Load Unpacked** and select the extension directory.
+
+## Enterprise Architecture
+
+The repository is structured to separate advertiser tools, publisher tools, and extension logic:
+
+```text
+adsense-compliance-auditor/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   └── workflows/
+│       └── compliance-ci.yml    <-- Live Linter & Lighthouse CI Engine
+├── advertiser-suite/
+│   ├── google-ads-budget-protector.md
+│   ├── meta-ads-optimization-engine.md
+│   └── rac_transcriber.py        <-- NEW: Referrer Ad Creative Formatter
+├── auditor-extension/
+│   ├── cls-tracer.js             <-- NEW: PerformanceObserver CLS Overlay
+│   ├── manifest.json
+│   ├── popup.css
+│   ├── popup.html
+│   └── popup.js
+├── publisher-suite/
+│   ├── atp_live_checker.py       <-- NEW: Live Privacy Vendor Check
+│   ├── vignette_shield.js        <-- NEW: Interstitial History Controller
+│   └── (core assets)
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md                     <-- Live Operations Manual
+├── USER_SETUP_GUIDE.md           <-- Multi-User Integration Steps
+├── ad_intents_mockup.html        <-- NEW: Gemini AI Intent UI Prototyper
+├── index.html                    <-- 3D Cyberpunk Monetized App Portal
+├── sitemap_crawler.py            <-- NEW: Deep XML Thin Material Scanner
+└── (all other root scripts)
+```
