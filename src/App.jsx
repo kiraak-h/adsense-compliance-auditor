@@ -19,6 +19,7 @@ export default function App() {
   const [pubPadding, setPubPadding] = useState(4)
   const [pubLegal, setPubLegal] = useState("Missing Privacy Policy")
   const [pubId, setPubId] = useState("pub-0000000000000000")
+  const [dragWarning, setDragWarning] = useState(false)
 
   // States for Meta
   const [metaHook, setMetaHook] = useState(9.2)
@@ -305,20 +306,52 @@ export default function App() {
 
             {activeTab === 'publisher' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 {/* Visual Ad Padding Simulator */}
+                 {/* Layout Shift Drag & Drop Simulator */}
                  <div className="p-6 bg-black/40 border border-white/10 rounded-xl flex flex-col gap-4">
-                    <h3 className="text-sm font-bold text-white font-mono uppercase">Padding Proximity</h3>
-                    <p className="text-xs text-slate-500">Simulate margin rules to prevent clickjacking.</p>
-                    <input type="range" min="0" max="50" step="1" className="accent-white" value={pubPadding} onChange={e => setPubPadding(e.target.value)} />
-                    <div className="mt-4 bg-slate-900 rounded overflow-hidden border border-slate-700 relative flex items-center justify-center min-h-[150px]">
-                      <motion.div 
-                        animate={{ padding: `${pubPadding}px` }} 
-                        className="bg-slate-800 rounded border border-slate-600 w-full h-full flex flex-col items-center justify-center"
-                      >
-                        <div className="bg-black p-4 border border-dashed border-slate-500 w-[80%] text-center text-xs font-mono text-slate-400">
-                          300x250 Ad Block
+                    <h3 className="text-sm font-bold text-white font-mono uppercase">Layout Shift Sandbox</h3>
+                    <p className="text-xs text-slate-500">Drag the ad block. Dropping it too close to the navigation bar violates AdSense clickjacking policies.</p>
+                    
+                    <div className="mt-4 bg-slate-900 rounded-xl overflow-hidden border border-slate-700 relative flex flex-col h-[250px]">
+                      {/* Fake Website Header */}
+                      <div className={`p-4 border-b transition-colors duration-300 ${dragWarning ? 'bg-red-500/20 border-red-500' : 'bg-slate-800 border-slate-600'}`}>
+                        <div className="flex justify-between items-center">
+                          <div className="w-24 h-4 bg-slate-600 rounded"></div>
+                          <div className="flex gap-2">
+                            <div className="w-8 h-3 bg-slate-600 rounded"></div>
+                            <div className="w-8 h-3 bg-slate-600 rounded"></div>
+                          </div>
                         </div>
-                      </motion.div>
+                      </div>
+                      
+                      {/* Fake Content Area */}
+                      <div className="flex-1 p-4 relative">
+                        <div className="w-3/4 h-3 bg-slate-700 rounded mb-2"></div>
+                        <div className="w-full h-3 bg-slate-700 rounded mb-2"></div>
+                        <div className="w-5/6 h-3 bg-slate-700 rounded mb-6"></div>
+                        
+                        {/* The Draggable Ad Block */}
+                        <motion.div 
+                          drag
+                          dragConstraints={{ left: -10, right: 10, top: -60, bottom: 60 }}
+                          dragElastic={0.1}
+                          onDrag={(event, info) => {
+                            // If the ad is dragged upwards towards the header (negative Y)
+                            if (info.offset.y < -30) {
+                              setDragWarning(true)
+                            } else {
+                              setDragWarning(false)
+                            }
+                          }}
+                          className={`absolute w-[80%] left-[10%] p-4 border-2 border-dashed cursor-grab active:cursor-grabbing text-center flex flex-col items-center justify-center transition-colors shadow-2xl ${
+                            dragWarning ? 'border-red-500 bg-red-500/20' : 'border-slate-500 bg-black/80 hover:border-slate-400'
+                          }`}
+                        >
+                          <span className={`text-xs font-mono font-bold ${dragWarning ? 'text-red-400' : 'text-slate-400'}`}>
+                            {dragWarning ? '🚨 ACCIDENTAL CLICK RISK' : '300x250 DRAGGABLE AD'}
+                          </span>
+                          <span className="text-[10px] text-slate-500 mt-1">Drag to test compliance</span>
+                        </motion.div>
+                      </div>
                     </div>
                   </div>
 
