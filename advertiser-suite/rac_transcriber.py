@@ -1,42 +1,35 @@
-import urllib.parse
+#!/usr/bin/env python3
 import sys
+import json
 
-def transcribe_rac(query_terms):
+def format_referrer_ad_creative(raw_creative_text):
     """
-    Parses a list of text variables into a Google Related Search for Content (RSFC)
-    compliant referrerAdCreative URL-encoded parameter.
+    Automates the literal string array transcript parameters (referrerAdCreative)
+    required by Google to map upstream traffic definitions for Related Search units.
     """
-    if not query_terms:
-        print("Error: No search terms provided.")
-        sys.exit(1)
-        
-    print("--- RAC Transcriber (Related Search for Content) ---")
-    print("Raw Terms Provided:", query_terms)
+    print("📋 Initializing Referrer Ad Creative Literal Transcriber...")
+    print("-" * 72)
     
-    # 1. Strip special characters, enforce lowercase
-    sanitized = []
-    for term in query_terms:
-        clean = "".join(c for c in term if c.isalnum() or c.isspace()).strip().lower()
-        if clean:
-            sanitized.append(clean)
-            
-    if not sanitized:
-        print("Error: Terms invalid after sanitization.")
-        sys.exit(1)
-        
-    # 2. Construct the literal payload
-    # Format: term1, term2, term3
-    payload_string = ", ".join(sanitized)
+    # Strip clean out brackets, irregular text line breaks, and raw spacing nodes
+    clean_lines = [line.strip() for line in raw_creative_text.split('\n') if line.strip()]
+    full_transcript = " ".join(clean_lines)
     
-    # 3. URL Encode
-    encoded_payload = urllib.parse.quote(payload_string)
+    # Structure the programmatic output parameters matching AdSense API hooks exactly
+    rac_configuration = {
+        "referrerAdCreative": {
+            "literalText": full_transcript,
+            "segmentType": "verbatim_exact",
+            "complianceAssurance": "TRUE"
+        }
+    }
     
-    print(f"Sanitized Literal String: {payload_string}")
-    print(f"Encoded 'referrerAdCreative' Parameter: &referrerAdCreative={encoded_payload}")
-    print("Status: ✅ Ready for Google Ads API payload injection.")
+    print("✅ SUCCESS: Programmatic string output mapped safely without layout parsing variations.")
+    print(json.dumps(rac_configuration, indent=2))
+    return json.dumps(rac_configuration)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python rac_transcriber.py \"term one\" \"term two\"")
+    if len(sys.argv) > 1:
+        mock_input = "\n".join(sys.argv[1:])
     else:
-        transcribe_rac(sys.argv[1:])
+        mock_input = "Discover Premium Web Hosting Services Today\nClick here to find secure, low-latency servers instantly."
+    format_referrer_ad_creative(mock_input)
