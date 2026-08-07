@@ -11,6 +11,23 @@ let sessionEntries = [];
 const observer = new PerformanceObserver((entryList) => {
   for (const entry of entryList.getEntries()) {
     if (!entry.hadRecentInput) {
+      console.warn(`⚠️ [CLS SHIFT DETECTED] Score impact: ${entry.value}`);
+      
+      // Draw a temporary visual pulsing neon rectangle over shifting DOM elements
+      if (entry.sources && entry.sources.length > 0) {
+          entry.sources.forEach(source => {
+              if (source.node && source.node.nodeType === Node.ELEMENT_NODE) {
+                  const targetEl = source.node;
+                  targetEl.style.outline = "2px dashed #ef4444";
+                  targetEl.style.boxShadow = "0 0 10px rgba(239, 68, 68, 0.5)";
+                  setTimeout(() => {
+                      targetEl.style.outline = "";
+                      targetEl.style.boxShadow = "";
+                  }, 3000);
+              }
+          });
+      }
+
       const firstSessionEntry = sessionEntries[0];
       if (sessionValue && entry.startTime - firstSessionEntry.startTime < 5000 && entry.startTime - sessionEntries[sessionEntries.length - 1].startTime < 1000) {
         sessionValue += entry.value;
@@ -24,6 +41,7 @@ const observer = new PerformanceObserver((entryList) => {
         clsEntries = sessionEntries;
         updateHud();
       }
+      console.log(`📊 [CURRENT CLS SCORE]: ${clsValue.toFixed(4)}`);
     }
   }
 });
