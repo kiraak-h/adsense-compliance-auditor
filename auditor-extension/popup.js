@@ -39,6 +39,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // 3. Live CLS Tracer
+  const launchClsBtn = document.getElementById("launch-cls-btn");
+  launchClsBtn.addEventListener("click", async () => {
+    resultsPanel.innerHTML = "<p class='loading'>> Injecting CLS PerformanceObserver...</p>";
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['cls-tracer.js']
+    }, () => {
+      resultsPanel.innerHTML = "<p class='success'>🚀 CLS Tracer injected! Watch the viewport HUD and shift borders.</p>";
+    });
+  });
+
   function renderResults(data) {
     if (data.violations.length === 0) {
       resultsPanel.innerHTML = "<p class='success'>🎉 COMPLIANCE PASSED: All monitored layout nodes match standard padding rules.</p>";
