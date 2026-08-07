@@ -2,17 +2,17 @@ import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-function Particles({ count = 200 }) {
+function Particles({ count = 150 }) {
   const mesh = useRef()
   const light = useRef()
   
   const particles = useMemo(() => {
     const temp = []
-    const colors = ['#ec4899', '#0ea5e9', '#f59e0b']
+    const colors = ['#333333', '#666666', '#999999']
     for (let i = 0; i < count; i++) {
       const t = Math.random() * 100
       const factor = 20 + Math.random() * 100
-      const speed = 0.01 + Math.random() / 200
+      const speed = 0.005 + Math.random() / 200
       const xFactor = -50 + Math.random() * 100
       const yFactor = -50 + Math.random() * 100
       const zFactor = -50 + Math.random() * 100
@@ -65,13 +65,13 @@ function Particles({ count = 200 }) {
 
   return (
     <>
-      <pointLight ref={light} distance={100} intensity={8} color="#ffffff" />
+      <pointLight ref={light} distance={100} intensity={2} color="#ffffff" />
       <instancedMesh ref={mesh} args={[null, null, count]}>
-        <dodecahedronGeometry args={[0.5, 0]} />
+        <dodecahedronGeometry args={[0.3, 0]} />
         <meshPhysicalMaterial 
-          roughness={0.1}
-          transmission={0.9}
-          thickness={1}
+          roughness={0.8}
+          transmission={0.1}
+          thickness={0.5}
         />
         <instancedBufferAttribute attach="instanceColor" args={[colorArray, 3]} />
       </instancedMesh>
@@ -81,10 +81,10 @@ function Particles({ count = 200 }) {
 
 export default function CanvasBackground() {
   return (
-    <div className="fixed inset-0 -z-10 bg-gradient-to-br from-[#fdfbfb] to-[#ebedee]">
+    <div className="fixed inset-0 -z-10 bg-transparent">
       <Canvas camera={{ position: [0, 0, 15], fov: 75 }}>
-        <ambientLight intensity={0.5} />
-        <Particles count={300} />
+        <ambientLight intensity={0.2} />
+        <Particles count={150} />
       </Canvas>
     </div>
   )
